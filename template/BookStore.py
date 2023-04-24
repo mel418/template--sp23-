@@ -6,7 +6,7 @@ import DLList
 import SLLQueue
 import ChainedHashTable
 import BinarySearchTree
-# import BinaryHeap
+import BinaryHeap
 # import AdjacencyList
 import time
 import MaxQueue
@@ -172,3 +172,89 @@ class BookStore:
 
         elapsed_time = time.time() - start_time
         print(f"addBookByPrefix Completed in {elapsed_time} seconds") 
+
+    # def bestsellers_with(self, infix, structure, n = 0) :
+    #     if n < 0:
+    #         print("Invalid number of titles.")
+    #         return
+    #     best_sellers = None
+    #     books = []
+    #     for i in range(self.bookCatalog.size()):
+    #         book = self.bookCatalog.get(i)
+    #         if infix in (book.title):
+    #             books.append(book)
+    #     if structure == 1:
+    #         best_sellers = BinarySearchTree.BinarySearchTree()
+    #         for book in books:
+    #             best_sellers.add(book.rank, book)
+    #         best_sellers = best_sellers.post_order()
+    #         for book.rank in best_sellers[:n]:
+    #             print(book)
+    #     elif structure == 2:
+    #         best_sellers = BinaryHeap.BinaryHeap()
+    #         for book in books:
+    #             book.rank*-1
+    #         books.sort()
+    #         for book in books:
+    #              best_sellers.add(-1 * book.rank)
+    #         while best_sellers.n > 0:
+    #             print(best_sellers.remove())
+    #     else:
+    #         print("Invalid data structure.")
+    #         return
+    #     if best_sellers is not None:
+    #         if infix == "":
+    #             print("Invalid infix.")
+    #             return
+    #     start_time = time.time()
+    #     elapsed_time = time.time() - start_time
+    #     print(f"Displayed bestsellers_with({infix}, {structure}, {n}) in {elapsed_time} seconds")
+
+    def bestsellers_with(self, infix, structure, n=0):
+        best_sellers = None
+        if structure == 1:
+            best_sellers = BinarySearchTree.BinarySearchTree()
+        elif structure == 2:
+            best_sellers = BinaryHeap.BinaryHeap()
+        else:
+            print("Invalid data structure.")
+
+        if best_sellers is not None:
+            if infix == "":
+                print("Invalid infix.")
+            elif n < 0:
+                print("Invalid number of titles.")
+            else:
+                start_time = time.time()
+                # todo
+                count = 0
+                if structure == 1:
+                    for book in self.bookCatalog:
+                        if infix in book.title:
+                            best_sellers.add(book.rank, book)
+                    temp = best_sellers.in_order()
+                    temp = temp[::-1]
+                    for i in range(len(temp)):
+                        print(temp[i].v)
+                        count += 1
+                        if n != 0 and count == n:
+                            break
+                elif structure == 2:
+                    temp = []
+                    count = 0
+                    for book in self.bookCatalog:
+                        if infix in book.title:
+                            best_sellers.add(-book.rank)
+                            temp.append(book)
+                    for i in range(len(temp)):
+                        abc = -best_sellers.remove()
+                        if n != 0 and count == n:
+                            break
+                        for j in range(len(temp)):
+                            if abc == temp[j].rank:
+                                print(temp[j])
+                                count += 1
+                                if n != 0 and count == n:
+                                    break
+                elapsed_time = time.time() - start_time
+                print(f"Displayed bestsellers_with({infix}, {structure}, {n}) in {elapsed_time} seconds")
